@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+	<link href='app.css' rel='stylesheet'>
+	<link href='normalize.css' rel='stylesheet'>
+	<link href='skeleton.css' rel='stylesheet'>
+	<style>
+	</style>
+  </head>
+  <body>
+	<script src="linpack.js"></script>
+	<script src="benchmark.js"></script>
+	<script src="sparc-worker.js"></script>
+	<script src="sparc-app.js"></script>
+	<script src="sparc-gpgpu.js"></script>
+	<script src="sparc-job.js"></script>
+	<script src="sparc-task.js"></script>
+	<script src="sparc-taskSlot.js"></script>
+	<section id="sparc-miner">
+		<div class="container">
+			<div class="twelve columns">
+				<div class="chart" id="graph" data-percent="0"></div>
+			</div>
+			<div class="four columns infoBox">
+				<label for="gflops">PEAK CPU GFlops</label>	
+				<h4 id="gflops" style=>0.00</h4>
+				<img src="img/rabbit.png">
+			</div>
+			<div class="four columns infoBox">
+				<label for="gflops">PEAK GPU GFlops</label>	
+				<h4 id="gpu-gflops" style=>0.00</h4>
+				<img src="img/rabbit.png">
+			</div>
+            <div class="four columns infoBox">
+				<label for="totaltime">Total Time</label>
+				<h4 id="totaltime">00.00s</h4>
+				<img src="img/clock.png">
+            </div>
+		</div>
+	</section>
+	<section id="sparc-miner">
+		<div class="container">
+			<div class="six columns">
+				<label for="runButton">Controls</label>
+				<input class="button-primary button green" value="Benchmark" id="start-button" onclick="benchmark.startBench()">
+			</div>
+            <div class="six columns">
+				<label for="slotInput">Number Of Slots</label>
+				<input class="u-full-width" type="number" id="slot-input" value="4">
+            </div>
+			<div id="loadingBox">
+				<h4>Working, please Wait...<img src="img/loading.gif"></h4>
+			</div>
+		</div>
+	</section>
+	<section id="sparc-progress">
+		<div class="container" id="progress-container">
+			<h4>Progress:</h4>
+		</div>
+	</section>
+  </body>
+</html>
