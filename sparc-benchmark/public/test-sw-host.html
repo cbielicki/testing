@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+	<link href='app.css' rel='stylesheet'>
+	<link href='normalize.css' rel='stylesheet'>
+	<link href='skeleton.css' rel='stylesheet'>
+	<style>
+		.banner {
+			position: relative;
+			top: 15px;
+			max-width: 100%;
+			display: inline-block;
+		}
+		.title {
+			text-align: center;
+			margin-top: 30px;
+		}
+		@media (min-width: 550px) {
+			.banner {
+				max-height: 60px;
+			}
+			.title {
+				display: inline;
+				text-align: left;
+				margin-left: 15px;
+			}
+		}
+	</style>
+  </head>
+  <body>
+	<script src="./test-service-worker.js"></script>
+	<script src="./browser_modules/system.js"></script>
+	<script src="./browser_modules/socket.io.js"></script>
+	<script src="./browser_modules/sparc-host.js"></script>
+	<section>
+		<div class="container">
+			<div class="row">
+				<img class="banner" src="img/banner.png">
+				<h4 class="title">Start a New Project</h4>
+			</div>
+		</div>
+	</section>
+	<section id="create-project">
+		<div class="container">
+          <form>
+            <div class="row">
+              <div class="six columns">
+                <label for="projectInput">Project Name</label>
+                <input class="u-full-width" type="text" value="My-Project" id="projectInput">
+              </div>
+              <div class="six columns">
+                <label for="versionInput">Version</label>
+                <input class="u-full-width" type="text" value="0.0.0" id="versionInput">
+              </div>
+            </div>
+			<label for="variableRangeList">Variable Ranges</label>
+			<div class="row">
+				<div class="three columns">
+					<label>Start</label>
+				</div>
+				<div class="three columns">
+					<label>End</label>
+				</div>
+				<div class="three columns">
+					<label>Interval</label>
+				</div>
+			</div>
+			<div class="row-list" id="variableRangeRowList"></div>
+			<input class="button" value="Add Variable Range" onclick="host.addVariableRange()">
+			<label for="dependencyList">Dependencies</label>
+			<div class="row">
+				<div class="three columns">
+					<label>Class</label>
+				</div>
+				<div class="three columns">
+					<label>Method</label>
+				</div>
+			</div>
+			<div class="row-list" id="dependancyRowList"></div>
+			<input class="button" value="Add Dependancy" onclick="host.addDependancy()">
+            <label for="setupArea">Setup</label>
+            <textarea class="u-full-width" placeholder="s.inB = new Float64Array(inB)" id="setupArea">s.inB = new Float64Array(inB);s.outB = new Float64Array(outB)</textarea>
+			<label for="fnArea">Function</label>
+            <textarea class="u-full-width" placeholder="Bessel.j0(s.inB, n << 1, s.outB, n << 1)" id="fnArea">Bessel.j0(s.inB, n << 1, s.outB, n << 1)</textarea>
+            <input class="button-primary button" value="Run Locally">
+			<input class="button-primary button" value="Send to Network" onclick="host.buildJob()">
+          </form>
+		</div>
+	</section>
+  </body>
+</html>
