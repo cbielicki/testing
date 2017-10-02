@@ -16,16 +16,16 @@
 				let file = JSON.parse(req.responseText)
 				let resultText = document.getElementById('resultText');
 				resultText.innerHTML = file.text;
-			}:
+			};
 			
-			req.open("GET", '/database/testfile.json');
+			req.open("GET", './server/database/testfile.json');
 			req.send();
 		};
 	</script>
 </head>
 <body>
 	<div style="backgound: #333333; width: 1100px; display: block; padding: 50px; margin: auto;">
-		<a onclick="loadFile();" style="display: block; padding: 10px; margin: 20px; background: #44DD88;">Load File</a>
+		<a onclick="loadfile();" style="display: block; padding: 10px; margin: 20px; background: #44DD88; cursor: pointer;">Load File</a>
 		<br><p id="resultText"></p>
 	</div>
 </body>
