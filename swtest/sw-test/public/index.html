@@ -10,7 +10,7 @@
 	</style>
 	<script>
 		//loading and managing the service worker
-		loadfile(){
+		function loadfile(){
 			var req = new XMLHttpRequest();
 			req.onload = function(){
 				let file = JSON.parse(req.responseText)
