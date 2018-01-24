@@ -3,14 +3,14 @@
 
 
 
-// finds a match for the user and uploads the active deck
-function findMatch(userID, deck){};
+// finds a match for the user and uploads the player's hand
+function findMatch(userID, hand){};
 
 
 
 
 // draws a card at a location with an optional target
-function drawCard(cardType, location, target){};
+function drawCard(cardType, position, target){};
 
 
 
