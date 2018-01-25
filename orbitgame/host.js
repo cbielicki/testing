@@ -69,12 +69,6 @@
 
 
 
-// checks that deck is legal and adds event listener for matcmaking?
-function startSearch(options){};
-
-
-
-
 // sends data to the player
 function send(options){};
 
@@ -98,6 +92,12 @@ function save(options){};
 
 
 
+// checks that deck is legal and adds event listener for matcmaking?
+function startSearch(options){};
+
+
+
+
 // updates the game world at each game interval
 function render(){
   // load the game deck here or keep the deck loaded?
@@ -107,17 +107,19 @@ function render(){
     let draw = data.draws.pop();
     switch(draw.type){
       case 'unit':
-        //needs logic for if draw is legal (resources, position etc)
-        data.units = spawnUnit(data.units, draw.player, draw.unitType, draw.position);
+        //TODO needs logic for if draw is legal (resources, position etc)
+        //TODO spend resources
+        data.units = spawnUnit(data.units, draw.player, draw.unitType, draw.position); //TODO add some stuff for unit command
         break;
       case 'trap':
-        //needs logic for if draw is legal (resources, position etc)
+        //TODO needs logic for if draw is legal (resources, position etc)
+        //TODO spend resources
         data.events.push(draw);
         break;
     };
   };
   // compute the events
-  for(let i = 0; i < data.events.length){
+  for(let i = 0; i < data.events.length; i++){
     if(data.events[i].timer === 0){
       data = computeEvent(data, i); //all damage/buffs/cc/kills will go here
     }else{
@@ -125,14 +127,15 @@ function render(){
     };
   };
   // determine unit behaviour and push events from the units
-  for(let i = 0; i < data.units.length){
+  for(let i = 0; i < data.units.length; i++){
     data.units = unitAct(data.units, i);
   };
   //determine resource distribution and resource point capture
   for(let i = 2; i < 5; i++){
     data.units = computeDepot(data.units, i);
   };
-  //determine win conditions will go here
+  //determine win conditions will go here TODO make this end the game on return
+  checkWin(data.units);
   save(data);
 };
 
@@ -144,7 +147,7 @@ function spawnUnit(units, player, unitType, position){
   let newUnit = {
     player: player,
     type: unitType,
-    position: position,
+    position: position, //TODO add command in arguments and new unit
   };
   units.push(newUnit);
   return units;
@@ -154,7 +157,7 @@ function spawnUnit(units, player, unitType, position){
 
 
 // determines the outcome of an event
-computeEvent(data index){
+function computeEvent(data, index){
   let event = data.event[index];
   if(event.expired === true) return;
   if(event.timer === 0){
@@ -163,10 +166,10 @@ computeEvent(data index){
         let unit = data.units[event.target];
         if(unit.position === event.position){
           if(unit.shield === 0){
-            unit.health = unit.health - event.power; //TODO all the accuracy stuff is going to replace this
-            if(unit.health <== 0) unit['expired'] = true;
+            unit.health -= event.power; //TODO all the accuracy stuff is going to replace this (also squadrons)
+            if(unit.health <= 0) unit['expired'] = true;
           }else{
-            unit.shield = unit.shield - event.power;
+            unit.shield -= event.power;
           };
         };
         data.units[event.target] = unit;
@@ -176,10 +179,10 @@ computeEvent(data index){
           let unit = data.units[i]
           if(unit.position === event.position && unit.player === event.targetPlayer){
             if(unit.shield === 0){
-              unit.health = unit.health - event.power; //TODO put something here for squadrons
-              if(unit.health <== 0) unit['expired'] = true;
+              unit.health -= event.power; //TODO put something here for squadrons
+              if(unit.health <= 0) unit['expired'] = true;
             }else{
-              unit.shield = unit.shield - event.power;
+              unit.shield -= event.power;
             };
           };
           data.units[i] = unit;
@@ -198,16 +201,89 @@ computeEvent(data index){
 
 
 // determines a units actions
-unitAct(units, index){
+function unitAct(units, index){
+  let unit = units[index];
+  //if there are no other objectives, attack the enemy battleship
+  if(unit.player === 1){
+    unit.destination = units[1].position;
+  }else{
+    unit.destination = units[0].position;
+  };
+  //capture the nearest uncaptured depot
+  for(let i = 2; i < 5; i++){
+    //TODO determine the closest uncaptured depot and move to it
+  };
+  //player given objective is highest priority
+  if(unit.command.complete === false){
+    unit.destination = unit.command.position;
+  };
+  //is there a unit in range?
+  for(let i = 0; i < units.length; i++){
+    if(i === index) continue;
+    //TODO attack target in range - or at least add to array of possible targets until choosing best one
+  };
+  //TODO update the unit position with best square in direction of destination
+  units[index] = unit;
   return units
 };
 
 
 
 
-//determines depot caputer and resource distribution
-computeDepot(units, index){
+//determines depot capture and resource distribution
+function computeDepot(units, index){
+  let depot = units[index];
+  let capturers = [0,0,0];
+  for(let i = 0; i < units.length; i++){
+    if(units[i].position === depot.position){
+      capturers[units[i].player]++
+    };
+  };
+  if(capturers[1] > 0 && capturers[2] === 0 && depot.player !== 1){
+    depot.player = 1;
+    depot.timer = 5;
+  };
+  if(capturers[2] > 0 && capturers[1] === 0 && depot.player !== 2){
+    depot.player = 2;
+    depot.timer = 5;
+  };
+  switch(depot.player){
+    case 0: break;
+    case 1:
+      if(depot.timer === 0){
+        units[0].lightMunitions += 3;
+        units[0].heavyMunitions += 2;
+        units[0].fusionCores += 1;
+      }else{
+        depot.timer--;
+      };
+      break;
+    case 2:
+      if(depot.timer === 0){
+        units[1].lightMunitions += 3;
+        units[1].heavyMunitions += 2;
+        units[1].fusionCores += 1;
+      }else{
+        depot.timer--;
+      };
+      break;
+  };
+  units[index] = depot;
   return units;
+};
+
+
+
+
+//check for win conditions
+function checkWin(units){
+  if(units[0].expired === true && units[1].expired === true) return 'draw';
+  if(units[0].fusionCores >= 100 && units[1].fusionCores >= 100) return 'draw';
+  if(units[0].expired === true) return 'player2Win';
+  if(units[1].expired === true) return 'player1Win';
+  if(units[0].fusionCores >= 100) return 'player1Win';
+  if(units[1].fusionCores >= 100) return 'player2Win';
+  return 'noEnd' //not sure if necessary? will prolly go over all the returns later
 };
 
 
@@ -218,7 +294,7 @@ let defaultDraws = [{
   type: 'unit',
   player: 1,
   unitType: 'battleship',
-  position: 0049,
+  position: 04,
   lightMunitions: 3,
   heavyMunitions: 0,
   fusionCores: 0,
@@ -226,7 +302,7 @@ let defaultDraws = [{
   type: 'unit',
   player: 2,
   unitType: 'battleship',
-  position: 9949,
+  position: 94,
   lightMunitions: 3,
   heavyMunitions: 0,
   fusionCores: 0,
@@ -234,15 +310,18 @@ let defaultDraws = [{
   type: 'unit',
   player: 0,
   unitType: 'depot',
-  position: 4905,
+  position: 48,
+  depotTimer: 0,
 },{
   type: 'unit',
   player: 0,
   unitType: 'depot',
-  position: 4949,
+  position: 44,
+  depotTimer: 0,
 },{
   type: 'unit',
   player: 0,
   unitType: 'depot',
-  position: 4994,
+  position: 41,
+  depotTimer: 0,
 }];
