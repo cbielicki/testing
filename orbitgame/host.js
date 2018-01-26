@@ -310,7 +310,7 @@ let defaultDraws = [{
   type: 'unit',
   player: 0,
   unitType: 'depot',
-  position: 48,
+  position: 47,
   depotTimer: 0,
 },{
   type: 'unit',
