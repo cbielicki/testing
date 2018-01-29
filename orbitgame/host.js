@@ -180,7 +180,7 @@ function computeEvent(data, index){
           if(unit.position === event.position && unit.player === event.targetPlayer){
             if(unit.shield === 0){
               unit.health -= event.power; //TODO put something here for squadrons
-              if(unit.health <= 0) unit['expired'] = true;
+              if(unit.health <= 0) unit['expired'] = true; //maybe pop and return to a 'dead units' so ui can splice too?
             }else{
               unit.shield -= event.power;
             };

@@ -1,0 +1,16 @@
+# Logs
+logs
+*.log
+orbitgame/npm-debug.log*
+
+# Dependency directories
+orbitgame/node_modules/
+
+# documentation build directory
+orbitgame/doc/*
+
+# app build directory
+orbitgame/build/*
+
+# package files
+orbitgame/package-lock.json
