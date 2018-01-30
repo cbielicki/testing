@@ -54,17 +54,17 @@
 //   time: 0,
 // };
 //example unit object:
-// data.units[0] = {
-//   type: 'battleship',
-//   player: 'xX6969stealthninjadestroyer6969Xx',
-//   shield: 35,
-//   health: 100,
-//   fusionCores: 16,
-//   lighMunitions: 42,
-//   heavyMunitions: 28,
-//   position: 0049, // 100x100 grid?
-//   behaviour: 'static', //prolly switch to a number based system
-// };
+data.units[0] = {
+  type: 'battleship',
+  player: 1,
+  shield: 35,
+  health: 100,
+  fusionCores: 16,
+  lighMunitions: 42,
+  heavyMunitions: 28,
+  position: '04', // 9x9 grid?
+  behaviour: 'static', //prolly switch to a number based system
+};
 
 
 
@@ -289,39 +289,30 @@ function checkWin(units){
 
 
 
-//default draws - battleships and depots
+//default draws - battleships and depots - could change for map or start conditions?
 let defaultDraws = [{
   type: 'unit',
   player: 1,
   unitType: 'battleship',
-  position: 04,
-  lightMunitions: 3,
-  heavyMunitions: 0,
-  fusionCores: 0,
+  position: '04',
 },{
   type: 'unit',
   player: 2,
   unitType: 'battleship',
-  position: 94,
-  lightMunitions: 3,
-  heavyMunitions: 0,
-  fusionCores: 0,
+  position: '94',
 },{
   type: 'unit',
   player: 0,
   unitType: 'depot',
-  position: 47,
-  depotTimer: 0,
+  position: '47',
 },{
   type: 'unit',
   player: 0,
   unitType: 'depot',
-  position: 44,
-  depotTimer: 0,
+  position: '44',
 },{
   type: 'unit',
   player: 0,
   unitType: 'depot',
-  position: 41,
-  depotTimer: 0,
+  position: '41',
 }];
